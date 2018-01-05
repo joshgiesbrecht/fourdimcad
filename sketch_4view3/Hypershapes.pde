@@ -1,88 +1,44 @@
-ArrayList<Hypersphere> objects;
-
-float chaos = 50;
-float size = 200;
-
-Hypersphere cursor;
-
-void setup() {
-  size(1200, 800, P3D);
-  background(0);
-  colorMode(HSB);
-  noStroke();
-  sphereDetail(10);
-  objects = new ArrayList<Hypersphere>();
-  cursor = new Hypersphere(0,0,0,0,20);
-}
-
-void mouseClicked() {
-  objects.add(cursor.copy());
-  cursor = new Hypersphere(0,0,0,0, 20);
-}
-
-
-void draw() {
-  lights();
-  background(0);
-
-  float slice = (mouseY * 1.0 / height) * 1000 - 500;
-  for (int i=0; i < objects.size(); i++) {
-    objects.get(i).drawViews();
-  }
-  
-  if (keyPressed) {
-    if (key == 'x') {
-      cursor.pos.x += mouseX - pmouseX;
-      cursor.pos.x = mid(cursor.pos.x, -size, size);
-    }
-    if (key == 'y') {
-      cursor.pos.y += mouseX - pmouseX;
-      cursor.pos.y = mid(cursor.pos.y, -size, size);
-    }
-    if (key == 'z') {
-      cursor.pos.z += mouseX - pmouseX;
-      cursor.pos.z = mid(cursor.pos.z, -size, size);
-    }
-    if (key == 'w') {
-      cursor.pos.w += mouseX - pmouseX;
-      cursor.pos.w = mid(cursor.pos.w, -size, size);
-    }
-  }
-  
-  cursor.drawViews();
-  
-  ellipse(10, mouseY, 5, 5);
-}
-
 class Hyperrect {
   Vec4D pos;
   Vec4D widths;
   
   Hyperrect(Vec4D p, Vec4D w) {
-    pos = p;
-    widths = w;
+    pos = new Vec4D(p);
+    widths = new Vec4D(w);
   }
   
   void updateWidths(Vec4D w) {
-    widths = w;
+    widths.x = w.x;
+    widths.y = w.y;
+    widths.z = w.z;
+    widths.w = w.w;
+  }
+  
+  void updatePos(Vec4D p) {
+    pos.x = p.x;
+    pos.y = p.y;
+    pos.z = p.z;
+    pos.w = p.w;
   }
   
   void drawViews() {
+    fill(255, 100);
+    
     // x-axis
     // (y, z, w)
     pushMatrix();
-    translate(width/2, height/2, 0);
+    translate(width/4, height/4, 0);
     rotateY(frameCount/200.0);
-    translate(pos.y, pos.z, pos.w);
+    translate(pos.y + widths.y/2, pos.z + widths.z/2, pos.w + widths.w/2);
     box(widths.y, widths.z, widths.w);
     popMatrix();
     
     // y-axis
     // (x, z, w)
     pushMatrix();
-    translate(width/2, height/2, 0);
+    translate(width*3/4, height/4, 0);
     rotateY(frameCount/200.0);
-    translate(pos.x, pos.z, pos.w);
+    translate(pos.x + widths.x/2, pos.z + widths.z/2, pos.w + widths.w/2);
     box(widths.x, widths.z, widths.w);
     popMatrix();
     
@@ -90,9 +46,9 @@ class Hyperrect {
     // z-axis
     // (y, x, w)
     pushMatrix();
-    translate(width/2, height/2, 0);
+    translate(width/4, height*3/4, 0);
     rotateY(frameCount/200.0);
-    translate(pos.y, pos.x, pos.w);
+    translate(pos.y + widths.y/2, pos.x + widths.x/2, pos.w + widths.w/2);
     box(widths.y, widths.x, widths.w);
     popMatrix();
     
@@ -100,15 +56,12 @@ class Hyperrect {
     // w-axis
     // (y, x, z)
     pushMatrix();
-    translate(width/2, height/2, 0);
+    translate(width*3/4, height*3/4, 0);
     rotateY(frameCount/200.0);
-    translate(pos.y, pos.x, pos.z);
+    translate(pos.y + widths.y/2, pos.x + widths.x/2, pos.z + widths.z/2);
     box(widths.y, widths.x, widths.z);
     popMatrix();
-    
-    
   }
-
   
 }
 
@@ -202,51 +155,4 @@ class Hypersphere {
     popMatrix();
   }
 
-}
-
-class Vec4D {
-  float x;
-  float y;
-  float z;
-  float w;
-  
-  Vec4D(Vec4D init) {
-    x = init.x;
-    y = init.y;
-    z = init.z;
-    w = init.w;
-  }
-  Vec4D(float a, float b, float c, float d) {
-    x = a;
-    y = b;
-    z = c;
-    w = d;
-  }
-
-  void add(Vec4D b) {
-    x += b.x;
-    y += b.y;
-    z += b.z;
-    w += b.w;
-  }
-}
-
-
-float mid(float a, float b, float c) {
-  if (a < b) {
-    if (c < a) {
-      return a;
-    } else if (b < c) {
-      return b;
-    } else {
-      return c;
-    }
-  } // a > b
-  if (b > c) {
-    return b;
-  } else if (a < c) {
-    return a;
-  } else {
-    return c;
-  }
 }
