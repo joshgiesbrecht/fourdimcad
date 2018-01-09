@@ -23,43 +23,36 @@ class Hyperrect {
   
   void drawViews() {
     fill(255, 100);
-    
+    stroke(255);
+
     // x-axis
-    // (y, z, w)
-    pushMatrix();
-    translate(width/4, height/4, 0);
-    rotateY(frameCount/200.0);
-    translate(pos.y + widths.y/2, pos.z + widths.z/2, pos.w + widths.w/2);
-    box(widths.y, widths.z, widths.w);
+    // (w, y, z)
+    setupView(1);
+    translate(pos.w + widths.w/2, pos.y + widths.y/2, pos.z + widths.z/2);
+    box(widths.w, widths.y, widths.z);
     popMatrix();
     
     // y-axis
-    // (x, z, w)
-    pushMatrix();
-    translate(width*3/4, height/4, 0);
-    rotateY(frameCount/200.0);
-    translate(pos.x + widths.x/2, pos.z + widths.z/2, pos.w + widths.w/2);
-    box(widths.x, widths.z, widths.w);
+    // (x, w, z)
+    setupView(2);
+    translate(pos.x + widths.x/2, -(pos.w + widths.w/2), pos.z + widths.z/2);
+    box(widths.x, -widths.w, widths.z);
     popMatrix();
     
     
     // z-axis
-    // (y, x, w)
-    pushMatrix();
-    translate(width/4, height*3/4, 0);
-    rotateY(frameCount/200.0);
-    translate(pos.y + widths.y/2, pos.x + widths.x/2, pos.w + widths.w/2);
-    box(widths.y, widths.x, widths.w);
+    // (x, y, w)
+    setupView(3);
+    translate(pos.x + widths.x/2, pos.y + widths.y/2, pos.w + widths.w/2);
+    box(widths.x, widths.y, widths.w);
     popMatrix();
     
     
     // w-axis
-    // (y, x, z)
-    pushMatrix();
-    translate(width*3/4, height*3/4, 0);
-    rotateY(frameCount/200.0);
-    translate(pos.y + widths.y/2, pos.x + widths.x/2, pos.z + widths.z/2);
-    box(widths.y, widths.x, widths.z);
+    // (x, y, z)
+    setupView(4);
+    translate(pos.x + widths.x/2, pos.y + widths.y/2, pos.z + widths.z/2);
+    box(widths.x, widths.y, widths.z);
     popMatrix();
   }
   
@@ -101,6 +94,8 @@ class Hypersphere {
   }
   
   void drawViews() {
+    fill(100, 100);
+    noStroke();
     drawX();
     drawY();
     drawZ();
@@ -108,12 +103,10 @@ class Hypersphere {
   }
   
   // look down the x-axis at the 4D object
-  // (y, z, w)
   void drawX() {
-    pushMatrix();
-    translate(width/4, height/4, 0);
-    rotateY(frameCount/200.0);
-    translate(pos.y, pos.z, pos.w);
+    setupView(1);
+
+    translate(pos.w, pos.y, pos.z);
     fill(hue, 100, lerp(50,205, (pos.x+size)/(2*size)));
     sphere(rad);
     popMatrix();
@@ -122,10 +115,9 @@ class Hypersphere {
   // look down the y-axis at the 4D object
   // (x, z, w)
   void drawY() {
-    pushMatrix();
-    translate(width*3/4, height/4, 0);
-    rotateY(frameCount/200.0);
-    translate(pos.x, pos.z, pos.w);
+    setupView(2);
+
+    translate(pos.x, -pos.w, pos.z);
     fill(hue, 100, lerp(50,205, (pos.y+size)/(2*size)));
     sphere(rad);
     popMatrix();
@@ -134,10 +126,9 @@ class Hypersphere {
   // look down the z-axis at the 4D object
   // (y, x, w)
   void drawZ() {
-    pushMatrix();
-    translate(width/4, height*3/4, 0);
-    rotateY(frameCount/200.0);
-    translate(pos.y, pos.x, pos.w);
+    setupView(3);
+
+    translate(pos.x, pos.y, pos.w);
     fill(hue, 100, lerp(50,205, (pos.z+size)/(2*size)));
     sphere(rad);
     popMatrix();
@@ -146,10 +137,9 @@ class Hypersphere {
   // look down the w-axis at the 4D object
   // (y, x, z)
   void drawW() {
-    pushMatrix();
-    translate(width*3/4, height*3/4, 0);
-    rotateY(frameCount/200.0);
-    translate(pos.y, pos.x, pos.z);
+    setupView(4);
+
+    translate(pos.x, pos.y, pos.z);
     fill(hue, 100, lerp(50,205, (pos.w+size)/(2*size)));
     sphere(rad);
     popMatrix();

@@ -32,3 +32,22 @@ class Vec4D {
   }
   
 }
+
+// axis: 1=x, 2=y, 3=z, 4=w
+void setupView(int axis) {
+  // x-axis
+  // (y, z, w)
+  pushMatrix();
+  translate(width/2, height*2.0/3, 0);
+  rotateX(radians(-20));
+  rotateY(angle);
+  if (axis == 1) {
+    translate(400, 0, 0);
+  } else if (axis == 2) {
+    translate(0, -400, 0);
+  } else if (axis == 3) {
+    translate(0, 0, 400);
+  } else {
+    translate(0, 0, 0);
+  }
+}

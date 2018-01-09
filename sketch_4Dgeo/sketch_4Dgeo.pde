@@ -1,9 +1,9 @@
 ArrayList<Hypersphere> objects;
 
-float chaos = 50;
+float chaos = 20;
 
 void setup() {
-  size(2000, 1600, P3D);
+  size(1100, 800, P3D);
   background(0);
   noStroke();
   sphereDetail(10);
@@ -13,7 +13,7 @@ void setup() {
   float z=0;
   float j=0;
   for (int n=0; n<15; n++) {
-    y=500;
+    y=200;
     x=0;
     z=0;
     j=0;

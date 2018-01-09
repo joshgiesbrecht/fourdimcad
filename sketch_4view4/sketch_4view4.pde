@@ -3,17 +3,22 @@ ArrayList<Hyperrect> objects;
 float size = 200;
 
 boolean newHR;
+float angle = 0;
 
 Hypersphere cursor;
 Hyperrect nextrect;
 
 void setup() {
   size(1200, 800, P3D);
+  //ortho();
+  camera(width/2.0, height/2.0, (height/2.0) / tan(PI*30.0 / 180.0), width/2.0, height/2.0, 0, 0, 1, 0);
   background(0);
   colorMode(HSB);
   noStroke();
   sphereDetail(10);
   objects = new ArrayList<Hyperrect>();
+  //nextrect = new Hyperrect(new Vec4D(-50, -50, -50, -50), new Vec4D(30, 60, 90, 120));
+  //objects.add(nextrect);
   cursor = new Hypersphere(0,0,0,0,20);
   nextrect = new Hyperrect(new Vec4D(0,0,0,0), new Vec4D(0,0,0,0));
   newHR = true;
@@ -52,6 +57,8 @@ void draw() {
       cursor.pos.w += mouseX - pmouseX;
       cursor.pos.w = mid(cursor.pos.w, -size, size);
     }
+  } else {
+    angle += (mouseX - pmouseX) / 200.0;
   }
   
   cursor.drawViews();
@@ -64,8 +71,8 @@ void draw() {
     tmp.subtract(nextrect.pos);
     text("tmp: " + tmp.x + ", " + tmp.y  + ", " + tmp.z + ", " + tmp.w, 100, 300);
     nextrect.updateWidths(tmp);
+    nextrect.drawViews();
   }
-  nextrect.drawViews();
 
   for (int i=0; i < objects.size(); i++) {
     objects.get(i).drawViews();
